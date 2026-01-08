@@ -1,7 +1,9 @@
 # MERN Blog Application – Backend (Server)
 
-A production-ready **Blog Application Backend** built using the **MERN stack** (MongoDB, Express.js, Node.js).  
-This project implements **authentication, role-based access control (RBAC), posts, comments, and admin APIs** following clean architecture and best practices.
+A production-ready **Blog Application Backend** built using the **MERN stack**  
+(**MongoDB, Express.js, Node.js**).
+
+This backend implements **authentication, role-based access control (RBAC), posts, comments, and admin APIs** following clean architecture and best practices.
 
 ---
 
@@ -9,7 +11,7 @@ This project implements **authentication, role-based access control (RBAC), post
 
 ### Authentication & Authorization
 - User registration, login, logout
-- JWT Access Token & Refresh Token implementation
+- JWT Access Token & Refresh Token
 - Secure password hashing using **bcrypt**
 - Token-based authentication middleware
 - Role-Based Access Control (RBAC)
@@ -25,7 +27,7 @@ This project implements **authentication, role-based access control (RBAC), post
 - Author ownership validation
 - Soft delete support
 - Pagination & optimized MongoDB queries
-- URL-friendly slug generation
+- SEO-friendly slug generation
 
 ---
 
@@ -58,31 +60,31 @@ This project implements **authentication, role-based access control (RBAC), post
 
 ## Installation Instructions
 
-### Clone the Repository
+### 1️⃣ Clone the Repository
 ```bash
-git clone <your-github-repository-url>
-cd server
-
-
-## Install Dependencies
-
-Install all required Node.js dependencies using npm:
-
-```bash
-npm install
+git clone https://github.com/PrashantJha183/TechExactly-blog-backend
+cd TechExactly-blog-backend
+```
 
 ---
 
-## Environment Variables (`.env`)
+### 2️⃣ Install Dependencies
+```bash
+npm install
+```
 
-Create a `.env` file in the root of the **server** directory and add the following environment variables:
+---
+
+### 3️⃣ Environment Variables (`.env`)
+
+Create a `.env` file in the **server root directory** and add:
 
 ```env
 PORT=5000
 NODE_ENV=development
 
 # MongoDB
-MONGO_URI=mongodb://localhost:27017/blog_app
+MONGO_URI=mongodb://localhost:27017/TechExactly
 
 # JWT Secrets
 JWT_ACCESS_SECRET=your_access_secret_key
@@ -91,13 +93,14 @@ JWT_REFRESH_SECRET=your_refresh_secret_key
 # Token Expiry
 JWT_ACCESS_EXPIRE=15m
 JWT_REFRESH_EXPIRE=7d
+```
 
 ---
 
-## Running the application
-
+### 4️⃣ Run the Application
 ```bash
 nodemon app
+```
 
 ---
 
@@ -152,7 +155,6 @@ nodemon app
 ---
 
 ## Architecture Highlights
-
 - Clean separation of concerns
 - Routes → Controllers → Services → Models
 - Middleware-driven authentication & authorization
@@ -161,7 +163,6 @@ nodemon app
 ---
 
 ## Testing
-
 - APIs tested using **Postman / Thunder Client**
 - JWT-protected route validation
 - Manual integration testing completed
@@ -169,7 +170,4 @@ nodemon app
 ---
 
 ## Author
-
 **Prashant Jha**
-
----
