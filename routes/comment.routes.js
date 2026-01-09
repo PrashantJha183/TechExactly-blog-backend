@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/post/:postId", commentController.getCommentsByPost);
 
 /* =========================
-   PROTECTED ROUTES (STATIC FIRST)
+   PROTECTED ROUTES
 ========================= */
 router.get("/my-comments", authMiddleware, commentController.getMyComments);
 router.post("/", authMiddleware, commentController.createComment);

@@ -5,11 +5,16 @@ export const createComment = async (content, postId, userId) => {
   const post = await Post.findById(postId);
   if (!post) throw new Error("Post not found");
 
-  return Comment.create({
+  const comment = await Comment.create({
     content,
     post: postId,
     author: userId,
   });
+
+  //  Populate author so frontend always gets name
+  await comment.populate("author", "name");
+
+  return comment;
 };
 
 export const getCommentsByPost = async (postId) => {
@@ -34,6 +39,10 @@ export const updateComment = async (commentId, user, content) => {
 
   comment.content = content;
   await comment.save();
+
+  //  Populate again after update
+  await comment.populate("author", "name");
+
   return comment;
 };
 

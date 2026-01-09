@@ -5,7 +5,9 @@ import * as adminController from "../controllers/admin.controller.js";
 
 const router = express.Router();
 
-// Dashboard stats
+/* =========================
+   Dashboard
+========================= */
 router.get(
   "/dashboard",
   authMiddleware,
@@ -13,7 +15,9 @@ router.get(
   adminController.getDashboardStats
 );
 
-// Manage users
+/* =========================
+   Users
+========================= */
 router.get(
   "/users",
   authMiddleware,
@@ -21,12 +25,38 @@ router.get(
   adminController.getAllUsers
 );
 
-// Manage posts
+router.delete(
+  "/users/:id",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  adminController.deleteUserByAdmin
+);
+
+/* =========================
+   Posts
+========================= */
 router.delete(
   "/posts/:id",
   authMiddleware,
   roleMiddleware("ADMIN"),
   adminController.deletePostByAdmin
+);
+
+/* =========================
+   Comments (ADMIN)
+========================= */
+router.get(
+  "/comments",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  adminController.getAllComments
+);
+
+router.delete(
+  "/comments/:id",
+  authMiddleware,
+  roleMiddleware("ADMIN"),
+  adminController.deleteCommentByAdmin
 );
 
 export default router;

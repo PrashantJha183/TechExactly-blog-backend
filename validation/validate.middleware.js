@@ -1,16 +1,25 @@
-const validate = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body, {
-    abortEarly: false, // show all errors
-  });
-
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      errors: error.details.map((err) => err.message),
+const validate =
+  (schema, property = "body") =>
+  (req, res, next) => {
+    const { error, value } = schema.validate(req[property], {
+      abortEarly: false,
+      stripUnknown: true, // remove extra fields
     });
-  }
 
-  next();
-};
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        errors: error.details.map((err) => ({
+          field: err.path.join("."),
+          message: err.message,
+        })),
+      });
+    }
+
+    // overwrite with sanitized data
+    req[property] = value;
+    next();
+  };
 
 export default validate;

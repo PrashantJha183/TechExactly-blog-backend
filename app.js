@@ -1,6 +1,5 @@
 import express from "express";
 import dotenv from "dotenv";
-import rateLimit from "express-rate-limit";
 import cors from "cors";
 import compression from "compression";
 import morgan from "morgan";
@@ -15,6 +14,7 @@ import adminRoutes from "./routes/admin.routes.js";
 
 // Middleware
 import sanitizeMiddleware from "./middleware/sanitize.middleware.js";
+import { apiRateLimiter } from "./middleware/rateLimit.middleware.js";
 import { notFound, errorHandler } from "./middleware/error.middleware.js";
 
 dotenv.config();
@@ -24,7 +24,9 @@ const app = express();
 /* =========================
    Database Connection
 ========================= */
-connectDB();
+if (process.env.NODE_ENV !== "test") {
+  connectDB();
+}
 
 /* =========================
    Global Middlewares
@@ -34,36 +36,31 @@ connectDB();
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// Custom NoSQL sanitizer (Node v24 SAFE)
+// Sanitize request data
 app.use(sanitizeMiddleware);
 
-// Performance
+// Performance optimization
 app.use(compression());
 
 // CORS
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: process.env.CLIENT_URL,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Logging
+// Logging (disable during tests)
 if (process.env.NODE_ENV !== "test") {
   app.use(morgan("dev"));
 }
 
 /* =========================
-   Rate Limiter (INLINE)
+   Global API Rate Limiter
 ========================= */
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-app.use(limiter);
+app.use("/api", apiRateLimiter);
 
 /* =========================
    Routes
@@ -71,7 +68,8 @@ app.use(limiter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Server running & DB connected",
+    success: true,
+    message: "Server running",
   });
 });
 
@@ -83,15 +81,7 @@ app.use("/api/v1/admin", adminRoutes);
 /* =========================
    Error Handling
 ========================= */
-
 app.use(notFound);
 app.use(errorHandler);
 
-/* =========================
-   Server Listen
-========================= */
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+export default app;
