@@ -80,7 +80,7 @@ This backend implements **secure authentication, role-based access control (RBAC
 
 ```bash
 git clone https://github.com/PrashantJha183/TechExactly-blog-backend
-cd TechExactly-blog-backend/server
+cd TechExactly-blog-backend
 ```
 
 ---
